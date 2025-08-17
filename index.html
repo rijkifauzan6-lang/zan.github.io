@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jadwal Pelajaran Elegant</title>
+    <style>
+        :root {
+            --primary: #6a5acd;
+            --secondary: #9370db;
+            --light: #f8f9fa;
+            --dark: #343a40;
+            --border: #e0e0e0;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f5f7ff;
+            margin: 0;
+            padding: 20px;
+            color: var(--dark);
+        }
+        
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        
+        h1 {
+            text-align: center;
+            color: var(--primary);
+            margin-bottom: 30px;
+            font-weight: 600;
+        }
+        
+        .schedule {
+            background-color: white;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            overflow: hidden;
+        }
+        
+        .days {
+            display: flex;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+        }
+        
+        .day {
+            flex: 1;
+            text-align: center;
+            padding: 15px 10px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s;
+            position: relative;
+        }
+        
+        .day.active {
+            background-color: rgba(255, 255, 255, 0.2);
+            font-weight: 600;
+        }
+        
+        .day:not(:last-child)::after {
+            content: '';
+            position: absolute;
+            right: 0;
+            top: 15%;
+            height: 70%;
+            width: 1px;
+            background-color: rgba(255, 255, 255, 0.3);
+        }
+        
+        .schedule-content {
+            padding: 25px;
+        }
+        
+        .schedule-day {
+            display: none;
+            animation: fadeIn 0.5s;
+        }
+        
+        .schedule-day.active {
+            display: block;
+        }
+        
+        .time-slot {
+            display: flex;
+            align-items: center;
+            padding: 15px 0;
+            border-bottom: 1px dashed var(--border);
+        }
+        
+        .time {
+            width: 100px;
+            font-weight: 500;
+            color: var(--primary);
+        }
+        
+        .subject {
+            flex: 1;
+            padding-left: 20px;
+            position: relative;
+        }
+        
+        .subject::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background-color: var(--secondary);
+        }
+        
+        .teacher {
+            width: 200px;
+            text-align: right;
+            color: #666;
+            font-size: 0.9em;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        @media (max-width: 768px) {
+            .days {
+                flex-direction: column;
+            }
+            
+            .day::after {
+                display: none;
+            }
+            
+            .time-slot {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .time, .teacher {
+                width: auto;
+            }
+            
+            .teacher {
+                text-align: left;
+                padding-left: 28px;
+                padding-top: 5px;
+                font-size: 0.8em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Jadwal Pelajaran</h1>
+        
+        <div class="schedule">
+            <div class="days">
+                <div class="day active" data-day="senin">Senin</div>
+                <div class="day" data-day="selasa">Selasa</div>
+                <div class="day" data-day="rabu">Rabu</div>
+                <div class="day" data-day="kamis">Kamis</div>
+                <div class="day" data-day="jumat">Jumat</div>
+            </div>
+            
+            <div class="schedule-content">
+                <!-- Senin -->
+                <div class="schedule-day active" id="senin">
+                    <div class="time-slot">
+                        <div class="time">13.00 - 14.40</div>
+                        <div class="subject">Teknologi Layanan Jaringan</div>
+                        <div class="teacher">Ah. Dudy Fudoly, S. Kom</div>
+                    </div>
+                    <div class="time-slot">
+                        <div class="time">14.40 - 17.00</div>
+                        <div class="subject">Projek Kreatif dan Kewirausahan</div>
+                        <div class="teacher">R. Fikri Hafizh, S. Pd.</div>
+                    </div>
+                </div>
+                
+                <!-- Selasa -->
+                <div class="schedule-day" id="selasa">
+                    <div class="time-slot">
+                        <div class="time">13.00 - 14.15</div>
+                        <div class="subject">Matematika</div>
+                        <div class="teacher">Muhamad Fahmiyudin, S. Pd</div>
+                    </div>
+                    <div class="time-slot">
+                        <div class="time">14.40 - 15.30</div>
+                        <div class="subject">Bahasa Indonesia</div>
+                        <div class="teacher">Lilis Sumiati, S. Pd.
+</div>
+                    </div>
+                    <div class="time-slot">
+                        <div class="time">16.05 - 17.00</div>
+                        <div class="subject">PJOK</div>
+                        <div class="teacher">Hendra Kurniawan, S. Pd</div>
+                    </div>
+                </div>
+                
+                <!-- Rabu -->
+                <div class="schedule-day" id="rabu">
+                    <div class="time-slot">
+                        <div class="time">13.00 - 14.40</div>
+                        <div class="subject">Sistem Insfraktruktur Jaringan<div></div>
+                        <div class="teacher">Lato Hardi, S.S., M.M.</div>
+                        </div>
+                    </div>
+                    <div class="time-slot">
+                        <div class="time">14.40 - 15.05</div>
+                        <div class="subject">Pendidikan
+Kewarganegaraan</div>
+                        <div class="teacher">Muhamad Yanto, S. Pd</div>
+                        </div>
+                        <div class="time-slot">
+                          <div class="time">16.00 - 17.00</div>
+                          <div class="subject">Bahasa Sunda</div>
+                          <div class="teacher">Nelli Suantini, S. Pd</div>
+                    </div>
+                </div>
+                <!-- Kamis -->
+                <div class="schedule-day" id="kamis">
+                    <div class="time-slot">
+                        <div class="time">13.00 - 14.15</div>
+                        <div class="subject">Mapel Pilihan</div>
+                        <div class="teacher">Iwang Septian, S. Pd</div>
+                       </div>
+                        <div class="time-slot">
+                          <div class="time">14.15 - 15.30</div>
+                          <div class="subject">Bahasa Inggris
+</div>
+                          <div class="teacher">Resa Monica, S. Pd</div>
+                          </div>
+                        <div class="time-slot">
+                          <div class="time">16.00 - 17.00</div>
+                          <div class="subject">Pendidikan Agama Islam</div>
+                          <div class="teacher">Muhamad Aden Subhan, S. Ag</div>
+                    </div>
+                </div>
+                <!-- Jumat -->
+                <div class="schedule-day" id="jumat">
+                    <div class="time-slot">
+                        <div class="time">13.00 - 14.40</div>
+                        <div class="subject">Sistem Insfraktruktur Jaringan
+</div>
+                        <div class="teacher">Azi, S. Kom</div>
+                    </div>
+                    <div class="time-slot">
+                        <div class="time">14.40 - 17.00</div>
+                        <div class="subject">Sistem Administrasi Jaringan</div>
+                        <div class="teacher">Hendi Ramadhan, S. Kom</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const days = document.querySelectorAll('.day');
+        
+        days.forEach(day => {
+            day.addEventListener('click', () => {
+                // Remove active class from all days
+                days.forEach(d => d.classList.remove('active'));
+                // Add active class to clicked day
+                day.classList.add('active');
+                
+                // Hide all schedule days
+                document.querySelectorAll('.schedule-day').forEach(sd => {
+                    sd.classList.remove('active');
+                });
+                
+                // Show selected schedule day
+                const dayId = day.getAttribute('data-day');
+                document.getElementById(dayId).classList.add('active');
+            });
+        });
+    </script>
+</body>
+</html>
