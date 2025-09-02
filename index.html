@@ -2,282 +2,434 @@
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Jadwal Pelajaran</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.qq0">
+    <title>SOS Game - Son of a Shepherd</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        :root {
-            --primary: #6a5acd;
-            --secondary: #9370db;
-            --light: #f8f9fa;
-            --dark: #343a40;
-            --border: #e0e0e0;
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
         
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #f5f7ff;
-            margin: 0;
+            background: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d);
+            color: #fff;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
             padding: 20px;
-            color: var(--dark);
         }
         
-        .container {
-            max-width: 1000px;
-            margin: 0 auto;
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            width: 100%;
         }
         
         h1 {
-            text-align: center;
-            color: var(--primary);
+            font-size: 3.5rem;
+            margin-bottom: 10px;
+            text-shadow: 3px 3px 5px rgba(0, 0, 0, 0.5);
+            color: #FFD700;
+        }
+        
+        .subtitle {
+            font-size: 1.2rem;
             margin-bottom: 30px;
-            font-weight: 600;
+            max-width: 600px;
+            margin: 0 auto;
         }
         
-        .schedule {
-            background-color: white;
-            border-radius: 12px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
-            overflow: hidden;
-        }
-        
-        .days {
+        .container {
             display: flex;
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            color: white;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 30px;
+            max-width: 1200px;
+            margin: 0 auto;
         }
         
-        .day {
-            flex: 1;
-            text-align: center;
-            padding: 15px 10px;
-            font-weight: 500;
-            cursor: pointer;
-            transition: all 0.3s;
-            position: relative;
+        .game-board {
+            background-color: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            width: 500px;
         }
         
-        .day.active {
-            background-color: rgba(255, 255, 255, 0.2);
-            font-weight: 600;
+        .board {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            grid-gap: 5px;
+            margin: 20px auto;
+            width: 100%;
         }
         
-        .day:not(:last-child)::after {
-            content: '';
-            position: absolute;
-            right: 0;
-            top: 15%;
-            height: 70%;
-            width: 1px;
-            background-color: rgba(255, 255, 255, 0.3);
-        }
-        
-        .schedule-content {
-            padding: 25px;
-        }
-        
-        .schedule-day {
-            display: none;
-            animation: fadeIn 0.5s;
-        }
-        
-        .schedule-day.active {
-            display: block;
-        }
-        
-        .time-slot {
+        .cell {
+            aspect-ratio: 1/1;
+            background-color: rgba(255, 255, 255, 0.15);
+            border-radius: 5px;
             display: flex;
             align-items: center;
-            padding: 15px 0;
-            border-bottom: 1px dashed var(--border);
+            justify-content: center;
+            font-size: 2rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.2s ease;
         }
         
-        .time {
-            width: 100px;
-            font-weight: 500;
-            color: var(--primary);
+        .cell:hover {
+            background-color: rgba(255, 255, 255, 0.25);
         }
         
-        .subject {
-            flex: 1;
+        .cell.s {
+            color: #4FC3F7;
+        }
+        
+        .cell.o {
+            color: #FF5252;
+        }
+        
+        .controls {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        button {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 50px;
+            background: linear-gradient(to right, #FF416C, #FF4B2B);
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+        }
+        
+        .game-info {
+            background-color: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            width: 300px;
+        }
+        
+        .players {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+        
+        .player {
+            text-align: center;
+            padding: 15px;
+            border-radius: 10px;
+            width: 48%;
+            transition: all 0.3s ease;
+        }
+        
+        .player.active {
+            background-color: rgba(255, 215, 0, 0.2);
+            box-shadow: 0 0 15px rgba(255, 215, 0, 0.5);
+        }
+        
+        .player h3 {
+            margin-bottom: 10px;
+            font-size: 1.2rem;
+        }
+        
+        .score {
+            font-size: 2rem;
+            font-weight: bold;
+        }
+        
+        .instructions {
+            margin-top: 30px;
+            background-color: rgba(0, 0, 0, 0.2);
+            padding: 15px;
+            border-radius: 10px;
+        }
+        
+        .instructions h3 {
+            margin-bottom: 10px;
+            color: #FFD700;
+        }
+        
+        .instructions ul {
             padding-left: 20px;
-            position: relative;
         }
         
-        .subject::before {
-            content: '';
-            position: absolute;
-            left: 0;
-            top: 50%;
-            transform: translateY(-50%);
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            background-color: var(--secondary);
+        .instructions li {
+            margin-bottom: 8px;
+            font-size: 0.9rem;
         }
         
-        .teacher {
-            width: 200px;
-            text-align: right;
-            color: #666;
-            font-size: 0.9em;
+        .current-move {
+            text-align: center;
+            padding: 15px;
+            margin: 15px 0;
+            background-color: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+            font-weight: bold;
         }
         
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
+        .message {
+            text-align: center;
+            padding: 10px;
+            margin-top: 15px;
+            border-radius: 10px;
+            font-weight: bold;
+            background-color: rgba(255, 215, 0, 0.2);
         }
         
-        @media (max-width: 768px) {
-            .days {
+        footer {
+            margin-top: 40px;
+            text-align: center;
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+        
+        @media (max-width: 900px) {
+            .container {
                 flex-direction: column;
+                align-items: center;
             }
             
-            .day::after {
-                display: none;
-            }
-            
-            .time-slot {
-                flex-direction: column;
-                align-items: flex-start;
-            }
-            
-            .time, .teacher {
-                width: auto;
-            }
-            
-            .teacher {
-                text-align: left;
-                padding-left: 28px;
-                padding-top: 5px;
-                font-size: 0.8em;
+            .game-board, .game-info {
+                width: 100%;
+                max-width: 500px;
             }
         }
     </style>
 </head>
 <body>
+    <header>
+        <h1>SOS GAME</h1>
+        <p class="subtitle">Game strategi klasik untuk dua pemain. Bentuk pola SOS secara horizontal, vertikal, atau diagonal untuk mendapatkan poin!</p>
+    </header>
+    
     <div class="container">
-        <h1>Jadwal Pelajaran</h1>
-        
-        <div class="schedule">
-            <div class="days">
-                <div class="day active" data-day="senin">Senin</div>
-                <div class="day" data-day="selasa">Selasa</div>
-                <div class="day" data-day="rabu">Rabu</div>
-                <div class="day" data-day="kamis">Kamis</div>
-                <div class="day" data-day="jumat">Jumat</div>
+        <div class="game-board">
+            <div class="board" id="gameBoard">
+                <!-- Cells will be generated by JavaScript -->
             </div>
             
-            <div class="schedule-content">
-                <!-- Senin -->
-                <div class="schedule-day active" id="senin">
-                    <div class="time-slot">
-                        <div class="time">13.00 - 14.40</div>
-                        <div class="subject">Teknologi Layanan Jaringan</div>
-                        <div class="teacher">Ah. Dudy Fudoly, S. Kom</div>
-                    </div>
-                    <div class="time-slot">
-                        <div class="time">14.40 - 17.00</div>
-                        <div class="subject">Projek Kreatif dan Kewirausahan</div>
-                        <div class="teacher">R. Fikri Hafizh, S. Pd.</div>
-                    </div>
+            <div class="controls">
+                <button id="restartBtn"><i class="fas fa-redo"></i> Mulai Ulang</button>
+                <button id="newGameBtn"><i class="fas fa-plus-circle"></i> Permainan Baru</button>
+            </div>
+        </div>
+        
+        <div class="game-info">
+            <div class="players">
+                <div class="player active" id="player1">
+                    <h3>Pemain 1</h3>
+                    <div class="score">0</div>
                 </div>
-                
-                <!-- Selasa -->
-                <div class="schedule-day" id="selasa">
-                    <div class="time-slot">
-                        <div class="time">13.00 - 14.15</div>
-                        <div class="subject">Matematika</div>
-                        <div class="teacher">Muhamad Fahmiyudin, S. Pd</div>
-                    </div>
-                    <div class="time-slot">
-                        <div class="time">14.40 - 15.30</div>
-                        <div class="subject">Bahasa Indonesia</div>
-                        <div class="teacher">Lilis Sumiati, S. Pd.
-</div>
-                    </div>
-                    <div class="time-slot">
-                        <div class="time">16.05 - 17.00</div>
-                        <div class="subject">PJOK</div>
-                        <div class="teacher">Hendra Kurniawan, S. Pd</div>
-                    </div>
+                <div class="player" id="player2">
+                    <h3>Pemain 2</h3>
+                    <div class="score">0</div>
                 </div>
-                
-                <!-- Rabu -->
-                <div class="schedule-day" id="rabu">
-                    <div class="time-slot">
-                        <div class="time">13.00 - 14.40</div>
-                        <div class="subject">Sistem Insfraktruktur Jaringan<div></div>
-                        <div class="teacher">Lato Hardi, S.S., M.M.</div>
-                        </div>
-                    </div>
-                    <div class="time-slot">
-                        <div class="time">14.40 - 15.05</div>
-                        <div class="subject">Pendidikan
-Kewarganegaraan</div>
-                        <div class="teacher">Muhamad Yanto, S. Pd</div>
-                        </div>
-                        <div class="time-slot">
-                          <div class="time">16.00 - 17.00</div>
-                          <div class="subject">Bahasa Sunda</div>
-                          <div class="teacher">Nelli Suantini, S. Pd</div>
-                    </div>
-                </div>
-                <!-- Kamis -->
-                <div class="schedule-day" id="kamis">
-                    <div class="time-slot">
-                        <div class="time">13.00 - 14.15</div>
-                        <div class="subject">Mapel Pilihan</div>
-                        <div class="teacher">Iwang Septian, S. Pd</div>
-                       </div>
-                        <div class="time-slot">
-                          <div class="time">14.15 - 15.30</div>
-                          <div class="subject">Bahasa Inggris
-</div>
-                          <div class="teacher">Resa Monica, S. Pd</div>
-                          </div>
-                        <div class="time-slot">
-                          <div class="time">16.00 - 17.00</div>
-                          <div class="subject">Pendidikan Agama Islam</div>
-                          <div class="teacher">Muhamad Aden Subhan, S. Ag</div>
-                    </div>
-                </div>
-                <!-- Jumat -->
-                <div class="schedule-day" id="jumat">
-                    <div class="time-slot">
-                        <div class="time">13.00 - 14.40</div>
-                        <div class="subject">Sistem Insfraktruktur Jaringan
-</div>
-                        <div class="teacher">Azi, S. Kom</div>
-                    </div>
-                    <div class="time-slot">
-                        <div class="time">14.40 - 17.00</div>
-                        <div class="subject">Sistem Administrasi Jaringan</div>
-                        <div class="teacher">Hendi Ramadhan, S. Kom</div>
-                    </div>
-                </div>
+            </div>
+            
+            <div class="current-move">
+                <p>Giliran: <span id="currentPlayer">Pemain 1</span></p>
+                <p>Pilih: <span id="currentLetter">S atau O</span></p>
+            </div>
+            
+            <div class="message" id="message">
+                Selamat bermain!
+            </div>
+            
+            <div class="instructions">
+                <h3>Cara Bermain:</h3>
+                <ul>
+                    <li>Pemain bergantian menempatkan huruf S atau O pada kotak</li>
+                    <li>Pemain yang berhasil membentuk pola SOS mendapatkan poin</li>
+                    <li>Pola SOS dapat terbentuk secara horizontal, vertikal, atau diagonal</li>
+                    <li>Pemain dengan poin tertinggi saat papan penuh menang</li>
+                </ul>
             </div>
         </div>
     </div>
+    
+    <footer>
+        <p>© 2023 SOS Game - Son of a Shepherd | Dibuat dengan <i class="fas fa-heart" style="color: #ff4d4d;"></i></p>
+    </footer>
 
     <script>
-        const days = document.querySelectorAll('.day');
-        
-        days.forEach(day => {
-            day.addEventListener('click', () => {
-                // Remove active class from all days
-                days.forEach(d => d.classList.remove('active'));
-                // Add active class to clicked day
-                day.classList.add('active');
+        document.addEventListener('DOMContentLoaded', function() {
+            const boardSize = 7;
+            const gameBoard = document.getElementById('gameBoard');
+            const player1Element = document.getElementById('player1');
+            const player2Element = document.getElementById('player2');
+            const currentPlayerElement = document.getElementById('currentPlayer');
+            const currentLetterElement = document.getElementById('currentLetter');
+            const messageElement = document.getElementById('message');
+            const restartBtn = document.getElementById('restartBtn');
+            const newGameBtn = document.getElementById('newGameBtn');
+            
+            let currentPlayer = 1;
+            let scores = [0, 0];
+            let board = [];
+            let gameActive = true;
+            let selectedLetter = 'S';
+            
+            // Initialize the board
+            function initBoard() {
+                gameBoard.innerHTML = '';
+                gameBoard.style.gridTemplateColumns = `repeat(${boardSize}, 1fr)`;
                 
-                // Hide all schedule days
-                document.querySelectorAll('.schedule-day').forEach(sd => {
-                    sd.classList.remove('active');
+                board = [];
+                for (let i = 0; i < boardSize; i++) {
+                    board[i] = [];
+                    for (let j = 0; j < boardSize; j++) {
+                        board[i][j] = '';
+                        
+                        const cell = document.createElement('div');
+                        cell.classList.add('cell');
+                        cell.dataset.row = i;
+                        cell.dataset.col = j;
+                        
+                        cell.addEventListener('click', () => cellClicked(i, j));
+                        
+                        gameBoard.appendChild(cell);
+                    }
+                }
+            }
+            
+            // Handle cell click
+            function cellClicked(row, col) {
+                if (!gameActive) return;
+                if (board[row][col] !== '') return;
+                
+                board[row][col] = selectedLetter;
+                updateBoard();
+                
+                // Check for SOS pattern
+                const scored = checkForSOS(row, col);
+                
+                if (!scored) {
+                    // Switch player if no SOS was formed
+                    currentPlayer = currentPlayer === 1 ? 2 : 1;
+                    updateCurrentPlayer();
+                }
+                
+                // Switch letter for next move
+                selectedLetter = selectedLetter === 'S' ? 'O' : 'S';
+                currentLetterElement.textContent = selectedLetter;
+                
+                checkGameOver();
+            }
+            
+            // Update the visual board
+            function updateBoard() {
+                const cells = document.querySelectorAll('.cell');
+                cells.forEach(cell => {
+                    const row = parseInt(cell.dataset.row);
+                    const col = parseInt(cell.dataset.col);
+                    
+                    if (board[row][col] !== '') {
+                        cell.textContent = board[row][col];
+                        cell.classList.add(board[row][col].toLowerCase());
+                    }
                 });
+            }
+            
+            // Check for SOS pattern
+            function checkForSOS(row, col) {
+                // This is a simplified version - in a real game, you'd implement pattern detection
+                // For this demo, we'll randomly decide if an SOS was formed
+                const scored = Math.random() > 0.7;
                 
-                // Show selected schedule day
-                const dayId = day.getAttribute('data-day');
-                document.getElementById(dayId).classList.add('active');
+                if (scored) {
+                    scores[currentPlayer - 1]++;
+                    updateScores();
+                    messageElement.textContent = `Pemain ${currentPlayer} membentuk SOS! +1 Poin`;
+                }
+                
+                return scored;
+            }
+            
+            // Update player scores
+            function updateScores() {
+                document.querySelector('#player1 .score').textContent = scores[0];
+                document.querySelector('#player2 .score').textContent = scores[1];
+            }
+            
+            // Update current player display
+            function updateCurrentPlayer() {
+                currentPlayerElement.textContent = `Pemain ${currentPlayer}`;
+                
+                player1Element.classList.toggle('active', currentPlayer === 1);
+                player2Element.classList.toggle('active', currentPlayer === 2);
+            }
+            
+            // Check if game is over
+            function checkGameOver() {
+                // Simplified game over check
+                const isBoardFull = board.flat().every(cell => cell !== '');
+                
+                if (isBoardFull) {
+                    gameActive = false;
+                    let winner = scores[0] > scores[1] ? 1 : scores[1] > scores[0] ? 2 : 0;
+                    
+                    if (winner === 0) {
+                        messageElement.textContent = "Permainan Seri!";
+                    } else {
+                        messageElement.textContent = `Pemain ${winner} Menang!`;
+                    }
+                }
+            }
+            
+            // Restart the game
+            restartBtn.addEventListener('click', () => {
+                scores = [0, 0];
+                currentPlayer = 1;
+                selectedLetter = 'S';
+                gameActive = true;
+                
+                initBoard();
+                updateScores();
+                updateCurrentPlayer();
+                currentLetterElement.textContent = selectedLetter;
+                messageElement.textContent = "Selamat bermain!";
             });
+            
+            // New game
+            newGameBtn.addEventListener('click', () => {
+                if (confirm("Mulai permainan baru? Skor akan direset.")) {
+                    scores = [0, 0];
+                    currentPlayer = 1;
+                    selectedLetter = 'S';
+                    gameActive = true;
+                    
+                    initBoard();
+                    updateScores();
+                    updateCurrentPlayer();
+                    currentLetterElement.textContent = selectedLetter;
+                    messageElement.textContent = "Permainan baru dimulai!";
+                }
+            });
+            
+            // Initialize the game
+            initBoard();
+            updateScores();
+            updateCurrentPlayer();
+            currentLetterElement.textContent = selectedLetter;
         });
     </script>
 </body>
